@@ -1,7 +1,7 @@
 # Changelog
 
 ## 1.5.1
-- English log messages, add-on docs, blueprint and manual (`docs/MANUAL.en.md`); Slovak manual kept.
+- English log messages, add-on docs, blueprint and manual; English `docs/MANUAL.md` is now the default, Slovak moved to `docs/MANUAL.sk.md`.
 - `server_name` restricted to letters, digits, space, `_` and `-`.
 
 ## 1.5.0

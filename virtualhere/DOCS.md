@@ -5,7 +5,7 @@ can connect to it remotely with **F-Link**. When stopped, the add-on returns the
 Home Assistant, so the `jablotron100` integration works again without a host reboot.
 
 *SK: Zdieľa USB ústredne Jablotron cez sieť pre vzdialený F-Link. Po zastavení vráti USB
-späť do HA bez reštartu hosta. Návod v slovenčine je v [MANUAL.md](https://github.com/valdaaak/ha-jablotron-flink/blob/main/docs/MANUAL.md).*
+späť do HA bez reštartu hosta. Návod v slovenčine je v [MANUAL.sk.md](https://github.com/valdaaak/ha-jablotron-flink/blob/main/docs/MANUAL.sk.md).*
 
 ## Options
 
@@ -23,4 +23,4 @@ Find the VID:PID in HA under **Settings → System → Hardware → All hardware
 - The server listens on **TCP 7575**. **Never expose that port to the internet**; access via VPN only.
 - While it's running and a client has the device attached, the Jablotron integration has no connection to the panel.
 
-Full guide: [MANUAL.en.md](https://github.com/valdaaak/ha-jablotron-flink/blob/main/docs/MANUAL.en.md)
+Full guide: [MANUAL.md](https://github.com/valdaaak/ha-jablotron-flink/blob/main/docs/MANUAL.md)

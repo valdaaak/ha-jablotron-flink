@@ -3,6 +3,8 @@
 Tento návod ťa prevedie inštaláciou a bežným použitím. Počíta s tým, že HA už má
 ústredňu Jablotron pripojenú USB a integrácia `jablotron100` funguje.
 
+*English version: [MANUAL.en.md](MANUAL.en.md)*
+
 ## Obsah
 
 1. [Ako to funguje](#1-ako-to-funguje)
@@ -69,10 +71,10 @@ Tento návod ťa prevedie inštaláciou a bežným použitím. Počíta s tým, 
 3. Karta **Configuration** (predvolené hodnoty sú pre JA-100 Flexi):
 
    | Voľba | Predvolené | Kedy meniť |
-   |---|---|---|
+   | --- | --- | --- |
    | `usb_vid` | `16d6` | prakticky nikdy (Jablotron) |
    | `usb_pid` | `0008` | ak má tvoja ústredňa iné ID |
-   | `server_name` | `HA-Jablotron` | ľubovoľný názov, ktorý uvidíš v klientovi |
+   | `server_name` | `HA-Jablotron` | názov v klientovi (písmená, číslice, medzera, `_`, `-`) |
 
    ID overíš v **Settings → System → Hardware → ⋮ All hardware**, hľadaj `16d6`.
 
@@ -89,10 +91,10 @@ Tento návod ťa prevedie inštaláciou a bežným použitím. Počíta s tým, 
 1. **Settings → Automations & scenes → Blueprints → Import blueprint**
 2. URL:
    `https://github.com/valdaaak/ha-jablotron-flink/blob/main/blueprints/automation/jablotron_flink_toggle.yaml`
-3. Pri blueprinte **Jablotron F-Link prepínač (VirtualHere)** klikni **Create automation** a vyplň:
-   - **Prepínač**: helper z kroku 3.3
+3. Pri blueprinte **Jablotron F-Link toggle (VirtualHere)** klikni **Create automation** a vyplň:
+   - **Toggle**: helper z kroku 3.3
    - **VirtualHere add-on**: VirtualHere USB Server (Jablotron F-Link)
-   - **Integrácia Jablotron**: tvoja ústredňa
+   - **Jablotron integration**: tvoja ústredňa
 4. Ulož.
 
 Prepínač si pridaj na dashboard (dlaždica alebo entity karta).
@@ -147,7 +149,7 @@ počas F-Link session stlmiť (napr. podmienkou „prepínač F-Link je OFF“).
 musí byť:
 
 ```text
-Najdene /sys/bus/usb/devices/1-1.3 -> /dev/bus/usb/001/004, viazem kernel driver spat (USBDEVFS_CONNECT)
+Found /sys/bus/usb/devices/1-1.3 -> /dev/bus/usb/001/004, rebinding kernel driver (USBDEVFS_CONNECT)
 Connected driver to interface 0
 Connected driver to interface 1
 ```
@@ -157,8 +159,8 @@ Connected driver to interface 1
 | Príznak | Príčina | Riešenie |
 | --- | --- | --- |
 | Po OFF je integrácia Jablotron `unavailable` | `/dev/hidraw0` sa nevrátil alebo integrácia ho ešte nechytila | Pozri log add-onu. Ak je tam `Connected driver...`, stačí **Settings → System → Restart Home Assistant** (len Core). Ak sa to opakuje, v automatizácii (Take control blueprintu) nahraď posledný krok `homeassistant.reload_config_entry` za `homeassistant.restart`. |
-| Log: `16d6:0008 NEnajdeny v /sys` | Iné USB ID alebo ústredňa nie je pripojená | Over ID v Hardware a uprav `usb_vid`/`usb_pid`. |
-| Log: `usbreset ZLYHAL` | Add-on nemá prístup k USB | Over, že add-on je z tohto repa (má `usb: true`, `full_access: true`). Ak má karta add-onu prepínač *Protection mode*, skús ho vypnúť a add-on reštartovať. |
+| Log: `16d6:0008 NOT found in /sys` | Iné USB ID alebo ústredňa nie je pripojená | Over ID v Hardware a uprav `usb_vid`/`usb_pid`. |
+| Log: `usbreset FAILED` | Add-on nemá prístup k USB | Over, že add-on je z tohto repa (má `usb: true`, `full_access: true`). Ak má karta add-onu prepínač *Protection mode*, skús ho vypnúť a add-on reštartovať. |
 | Port 7575 sa na chvíľu otvorí a hneď zavrie | Rýchle prepnutie OFF → ON počas návratu | Blueprint to ošetruje (`mode: restart` + kontrola stavu). Počkaj 15 s a prepni ON znova. |
 | Klient nevidí hub | VPN, firewall, add-on nebeží | Over, že prepínač je ON a add-on beží, že z PC funguje `Test-NetConnection IP_HA -Port 7575` a hub je zadaný ručne (Specify Hubs). |
 | Klient vidí hub, ale nie zariadenie Jablotron | USB ID nesedí alebo zariadenie drží iný proces | Pozri log add-onu, over ID. |

@@ -6,9 +6,9 @@
 #include <sys/ioctl.h>
 #include <linux/usbdevice_fs.h>
 
-/* Naviaze kernel driver (usbhid) spat na rozhrania zariadenia.
-   USBDEVFS_CONNECT ide cez usbfs (/dev/bus/usb), ktore je zapisovatelne
-   (na rozdiel od /sys). Tym sa znovu vytvori /dev/hidraw0. */
+/* Rebinds the kernel driver (usbhid) to the device interfaces.
+   USBDEVFS_CONNECT goes through usbfs (/dev/bus/usb), which is writable
+   inside the add-on (unlike /sys). This recreates /dev/hidraw0. */
 int main(int argc, char **argv) {
     if (argc != 2) {
         fprintf(stderr, "Usage: usbreset /dev/bus/usb/BBB/DDD\n");

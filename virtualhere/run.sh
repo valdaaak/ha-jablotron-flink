@@ -7,7 +7,7 @@ SERVER_NAME="$(bashio::config 'server_name' | tr -cd 'A-Za-z0-9 _-')"
 
 reset_usb() {
   local found=0 d v p busnum devnum devpath
-  bashio::log.info "USB reset: hladam ${JA_VID}:${JA_PID} ..."
+  bashio::log.info "USB rebind: looking for ${JA_VID}:${JA_PID} ..."
   for d in /sys/bus/usb/devices/*; do
     [ -f "$d/idVendor" ] || continue
     v=$(cat "$d/idVendor" 2>/dev/null)
@@ -17,22 +17,22 @@ reset_usb() {
       busnum=$(cat "$d/busnum" 2>/dev/null)
       devnum=$(cat "$d/devnum" 2>/dev/null)
       devpath=$(printf "/dev/bus/usb/%03d/%03d" "$busnum" "$devnum")
-      bashio::log.info "Najdene $d -> $devpath, viazem kernel driver spat (USBDEVFS_CONNECT)"
+      bashio::log.info "Found $d -> $devpath, rebinding kernel driver (USBDEVFS_CONNECT)"
       if /usr/local/bin/usbreset "$devpath"; then
-        bashio::log.info "USB vratene kernelu -> /dev/hidraw* by sa mal vratit (reload integracie alebo 'ha core restart')"
+        bashio::log.info "USB returned to kernel -> /dev/hidraw* should be back (reload the integration or restart HA Core)"
       else
-        bashio::log.warning "usbreset ZLYHAL pre $devpath"
+        bashio::log.warning "usbreset FAILED for $devpath"
       fi
       sleep 1
     fi
   done
   if [ "$found" != "1" ]; then
-    bashio::log.warning "${JA_VID}:${JA_PID} NEnajdeny v /sys (je ustredna pripojena USB?)"
+    bashio::log.warning "${JA_VID}:${JA_PID} NOT found in /sys (is the panel connected via USB?)"
   fi
 }
 
 on_stop() {
-  bashio::log.info "Add-on sa zastavuje, vraciam USB kernelu..."
+  bashio::log.info "Add-on stopping, returning USB to the kernel..."
   pkill -x vhusbd 2>/dev/null
   sleep 1
   reset_usb
@@ -50,7 +50,7 @@ EOF
 
 /usr/sbin/vhusbd &
 sleep 1
-bashio::log.info "VirtualHere bezi na TCP 7575 (server '${SERVER_NAME}'). Zdielaj Jablotron USB v klientovi."
+bashio::log.info "VirtualHere running on TCP 7575 (server '${SERVER_NAME}'). Use the Jablotron device from the VirtualHere client."
 
 while true; do
   sleep 3600 &

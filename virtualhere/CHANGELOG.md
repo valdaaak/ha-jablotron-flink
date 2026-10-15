@@ -1,11 +1,15 @@
 # Changelog
 
+## 1.5.1
+- English log messages, add-on docs, blueprint and manual (`docs/MANUAL.en.md`); Slovak manual kept.
+- `server_name` restricted to letters, digits, space, `_` and `-`.
+
 ## 1.5.0
-- Prvé verejné vydanie.
-- VID, PID a názov servera sú nastaviteľné v konfigurácii add-onu.
+- First public release.
+- USB VID, PID and server name configurable in the add-on options.
 
 ## 1.4.0
-- Pri štarte aj stope sa kernel driver naviaže späť cez `USBDEVFS_CONNECT` (`/dev/hidraw*` sa vráti bez reštartu hosta).
+- Kernel driver is rebound via `USBDEVFS_CONNECT` on both start and stop (`/dev/hidraw*` comes back without a host reboot).
 
 ## 1.0.0
-- VirtualHere server pre USB ústredne Jablotron.
+- VirtualHere server for Jablotron USB control panels.

@@ -1,17 +1,17 @@
 blueprint:
-  name: Jablotron F-Link prepínač (VirtualHere)
+  name: Jablotron F-Link toggle (VirtualHere)
   description: >-
-    Jeden prepínač pre vzdialený F-Link.
-    ON spustí VirtualHere add-on (USB ústredne sa zdieľa cez sieť).
-    OFF vráti USB späť do Home Assistantu (reštart add-onu naviaže kernel driver),
-    add-on zastaví a znova načíta integráciu Jablotron.
-    Rýchle prepnutie OFF→ON počas návratu je ošetrené (mode restart + kontrola stavu).
+    One toggle for remote F-Link access.
+    ON starts the VirtualHere add-on (the panel's USB is shared over the network).
+    OFF returns the USB to Home Assistant (an add-on restart rebinds the kernel driver),
+    stops the add-on and reloads the Jablotron integration.
+    Quickly flipping OFF→ON while USB is being returned is handled (mode restart + state check).
   domain: automation
   source_url: https://github.com/valdaaak/ha-jablotron-flink/blob/main/blueprints/automation/jablotron_flink_toggle.yaml
   input:
     toggle:
-      name: Prepínač
-      description: input_boolean, ktorým sa F-Link režim zapína/vypína
+      name: Toggle
+      description: input_boolean that switches F-Link mode on/off
       selector:
         entity:
           filter:
@@ -21,8 +21,8 @@ blueprint:
       selector:
         addon:
     jablotron_entry:
-      name: Integrácia Jablotron
-      description: Config entry integrácie jablotron100, ktorá sa po návrate znova načíta
+      name: Jablotron integration
+      description: Config entry of the jablotron100 integration to reload after USB is returned
       selector:
         config_entry:
           integration: jablotron100
@@ -45,12 +45,12 @@ actions:
         data:
           addon: !input addon
     else:
-      # Reštart add-onu = pri štarte aj stope sa USB naviaže späť na kernel (spoľahlivejšie ako samotný stop)
+      # Restarting the add-on rebinds USB to the kernel on both start and stop (more reliable than a plain stop)
       - action: hassio.addon_restart
         data:
           addon: !input addon
       - delay: "00:00:06"
-      # Ak je prepínač medzitým zase ON, nezabíjaj čerstvo spustený add-on
+      # If the toggle was switched back ON meanwhile, don't kill the freshly started add-on
       - condition: state
         entity_id: !input toggle
         state: "off"

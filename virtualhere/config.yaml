@@ -1,7 +1,7 @@
 name: VirtualHere USB Server (Jablotron F-Link)
-version: "1.5.0"
+version: "1.5.1"
 slug: virtualhere
-description: USB-over-IP server pre vzdialeny F-Link k ustredni Jablotron pripojenej USB do HA
+description: USB-over-IP server for remote Jablotron F-Link access to a panel connected to HA via USB
 url: "https://github.com/valdaaak/ha-jablotron-flink"
 arch:
   - amd64

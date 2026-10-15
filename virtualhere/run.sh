@@ -2,7 +2,8 @@
 
 JA_VID="$(bashio::config 'usb_vid')"
 JA_PID="$(bashio::config 'usb_pid')"
-SERVER_NAME="$(bashio::config 'server_name')"
+SERVER_NAME="$(bashio::config 'server_name' | tr -cd 'A-Za-z0-9 _-')"
+[ -n "$SERVER_NAME" ] || SERVER_NAME="HA-Jablotron"
 
 reset_usb() {
   local found=0 d v p busnum devnum devpath
